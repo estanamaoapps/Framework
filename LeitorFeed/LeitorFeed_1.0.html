@@ -9,6 +9,62 @@
 <script type="text/javascript">
 	var php_get_feed_url = "http://plataforma.aplicativoscolmeia.com.br/estanamao_framework/feed_utils/get.php";	
 	
+	/*****************************************************************************************
+	
+	! CONFIGS
+	
+	*****************************************************************************************/
+	var CONFIGS_DEFAULT = {
+		// url para pegar o feed
+		"feed_url": "",
+		
+		// url para o php que pega o feed (geralmente está na plataforma por questões de erros de segurança)
+		"php_get_feed_url": "http://plataforma.aplicativoscolmeia.com.br/estanamao_framework/feed_utils/get.php",
+		
+		// se é para mostrar a primeira imagem do primeiro artigo como capa da lista de artigos ("item")
+		"show_list_cover": true,
+		
+		// nome do layout usado para o item da lista do feed
+		"list_item_layout" : "list_item",
+		
+		// se é para mostrar a imagem de miniatura do artigo
+		"show_list_item_thumbnail": true,
+		
+		// se é para mostrar o título na pagina do artigo
+		"show_page_item_title": true,
+		
+		// se é para mostrar a data nos itens da lista de artigos
+		"show_list_item_date": true,
+		
+		// se é para mostrar a data nos itens da lista de artigos
+		"list_item_data_format": "|D|/|M|/|Y|"
+	};
+	
+	var CONFIGS = GET["configs"];
+	
+	// construtor das configurações
+	function StartConfigs(){
+		// atribui os valores padrão, quando não há configuração vinda por GET["configs"]
+		for(var i in CONFIGS_DEFAULT){
+			if(CONFIGS[i] == null) CONFIGS[i] = CONFIGS_DEFAULT[i];
+		}
+	}
+	/*****************************************************************************************
+	
+	! GENERAL
+	
+	*****************************************************************************************/
+	// On Load Document
+	$(function(){
+	
+		// CONFIGS
+		StartConfigs();
+	});
+	
+	
+	
+	
+	
 	/* se é para mostrar a primeira imagem do primeiro artigo como capa da lista de artigos ("item") */
 	var show_list_cover = true;
 	/* se é para mostrar o título na pagina do artigo  */
@@ -132,9 +188,9 @@
 		$.ajax({
 			method: "GET",
 			dataType: "json",
-			url: php_get_feed_url,
+			url: CONFIGS["php_get_feed_url"],
 			data: {
-				url: GET["feed_url"]
+				url: CONFIGS["feed_url"]
 			}
 		}).done(function(json_feed){
 			feed = json_feed;
