@@ -1,0 +1,159 @@
+<title></title>
+<meta charset="UTF-8">
+
+<!-- Mobile -->
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<!-- JQuery -->
+<script src="//code.jquery.com/jquery-1.11.3.min.js"></script>
+		
+<!-- Latest compiled and minified CSS -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+
+<!-- Optional theme -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap-theme.min.css">
+
+<!-- Latest compiled and minified JavaScript -->
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+
+<style type="text/css">
+	/****************************
+	
+	COLORS
+	
+	*****************************/
+	.separator-color{
+		color: #073240 !important;
+		border-color: #073240 !important;
+	}			
+	.title-color, .font-color, .font-color *{
+		color: #073240 !important;				
+	}
+	.arrow-color{
+		color: #073240 !important;				
+	}
+	.feed-item-page-title-color{
+		background-color: #b0c7cf;
+		color: #073240;
+	}			
+	/****************************
+	
+	GENERAL
+	
+	*****************************/
+	body{
+		overflow-x: hidden;
+		padding-bottom: 70px !important;
+	}
+	.total-fluid{
+		width: 100%;
+		padding: 0px;
+		margin: 0px;
+	}			
+	a:link, a:visited {
+		text-decoration: none
+	}
+	a:hover {
+		text-decoration: none; 				
+	}
+	a:active {
+		text-decoration: none
+	}
+	
+	/****************************
+	
+	FEED LIST
+	
+	*****************************/
+	.list-item{
+		cursor: pointer;
+	}
+	.list-cover-height{
+		height: 200px;	
+	}
+	.list-cover-background{
+		background-repeat: no-repeat;
+		background-position: center top;
+		background-size: cover;
+		
+		-webkit-box-shadow: 0px 3px 5px 0px rgba(50, 50, 50, 0.29);
+		-moz-box-shadow:    0px 3px 5px 0px rgba(50, 50, 50, 0.29);
+		box-shadow:         0px 3px 5px 0px rgba(50, 50, 50, 0.29);
+	}			
+	.list-cover-title-bg{
+		background-color:rgba(255, 255, 255, 0.8); 
+		
+		-webkit-box-shadow: 0px -7px 15px 0px rgba(50, 50, 50, 0.74);
+		-moz-box-shadow:    0px -7px 15px 0px rgba(50, 50, 50, 0.74);
+		box-shadow:         0px -7px 15px 0px rgba(50, 50, 50, 0.74);
+	}
+	.list-item-height{
+		height:72px;
+	}
+	.list-item-thumbnail-size{
+		width:72px;
+		height:72px;
+	}			
+	.list-item-title{
+		font-size:14px;
+		font-weight: bold;
+		padding-top: 5px;	
+		padding-bottom: 5px;	
+		text-align: left;
+		align: left;
+	}			
+	.list-item-title-date{
+		padding-top: 5px;	
+		font-size:14px;
+		font-weight: normal;				
+		text-align: left;
+		align: left;
+	}
+	
+	.list-item-arrow{
+		font-size: 20px;
+	}
+	.list-item-separator{
+		border-bottom-width:1px;
+		border-bottom-style: solid;
+		
+		opacity: 0.2;
+	}
+	
+	/****************************
+	
+	FEED ITEM (ARTIGO)
+	
+	*****************************/
+	.feed-item-page{
+		padding: 10px;
+	}
+	.feed-item-page *{				
+		text-align: left !important;
+		line-height: 20px !important;
+		font-size: 18px !important;
+		
+		margin: 0px !important;				
+	}
+	.feed-item-page img{
+		width: 100% !important;
+		height: auto !important;
+		
+		padding: 5px !important;
+		border:  1px solid #CCCCCC !important;
+		
+		-webkit-box-shadow: 2px 3px 5px 0px rgba(50, 50, 50, 0.35);
+		-moz-box-shadow:    2px 3px 5px 0px rgba(50, 50, 50, 0.35);
+		box-shadow:         2px 3px 5px 0px rgba(50, 50, 50, 0.35);
+	}
+	.feed-item-page-title{
+		padding:10px;
+		font-size:15px;
+		font-weight:bold;
+		text-align: center;
+		
+		-webkit-box-shadow: 0px 2px 5px 0px rgba(50, 50, 50, 0.2);
+	-moz-box-shadow:    0px 2px 5px 0px rgba(50, 50, 50, 0.2);
+	box-shadow:         0px 2px 5px 0px rgba(50, 50, 50, 0.2);
+	}
+</style>
