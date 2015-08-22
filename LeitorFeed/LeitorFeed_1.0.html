@@ -55,13 +55,12 @@
 				  "opacity": "0"
 					}, 300, "linear", function() {		*/
 						var item_data = feed["feed"]["entry"][parseInt(hash_array[1])];
-				
-						if(item_data["content"] != null && item_data["content"]["$t"] != null){
+					
+						$("#item_content").empty();
+						if(item_data["content"] != null && item_data["content"]["$t"] != null){							
 							if(show_page_item_title == true)
 								$("#item_content").html('<div class="feed-item-page-title feed-item-page-title-color">' + item_data["title"]["$t"] + '</div>');
 							$("#item_content").append('<div class="feed-item-page font-color">' + item_data["content"]["$t"] + '</div>');
-						}else{
-							$("#item_content").html("");
 						}
 						
 						/* pega a url da imagem e desabilita o link dela  */
@@ -135,6 +134,8 @@
 		}).done(function(json_feed){
 			feed = json_feed;
 			if(json_feed["feed"] != null){						
+				$("#feed").empty();
+				
 				for(var i=0; i<json_feed["feed"]["entry"].length; i++){
 					var html = '<div class="total-fluid">';
 					var d = new Date(json_feed["feed"]["entry"][i].published["$t"]);
