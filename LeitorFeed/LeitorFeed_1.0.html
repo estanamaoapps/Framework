@@ -59,6 +59,100 @@
 	
 		// CONFIGS
 		StartConfigs();
+		
+		
+		
+		
+		$("#image_viewer").css("display", "none");
+		$("#item_content").css("display", "none");
+		$("#feed").css("display", "block");
+					
+					
+		$(window).scroll(function () {
+			lastPageYOffset = $(window).scrollTop();
+				
+			if($("#image_viewer").css("display") == "block")
+				save_scroll["image"] = $(window).scrollTop();
+			else if($("#item_content").css("display") == "block")
+				save_scroll["item"] = $(window).scrollTop();
+			else if($("#feed").css("display") == "block")
+				save_scroll["list"] = $(window).scrollTop();					
+		});
+		$.ajax({
+			method: "GET",
+			dataType: "json",
+			url: CONFIGS["php_get_feed_url"],
+			data: {
+				url: CONFIGS["feed_url"]
+			}
+		}).done(function(json_feed){
+			feed = json_feed;
+			if(json_feed["feed"] != null){						
+				$("#feed").empty();
+				
+				for(var i=0; i<json_feed["feed"]["entry"].length; i++){
+					var html = '<div class="total-fluid">';
+					var d = new Date(json_feed["feed"]["entry"][i].published["$t"]);
+					
+					/* imagem principal da lista de itens do feed + dados  */
+					if(show_list_cover == true && i == 0){
+						html += '<div class="list-item total-fluid list-cover-background list-cover-height" item-id="' + i + '" style="background-image:url(' + GetFirstImgUrlFromContent(json_feed["feed"]["entry"][i]["content"]["$t"]) + ');">';
+							
+							html += '<table class="total-fluid list-cover-height">';
+								html += '<tr class="total-fluid">';
+									html += '<td class="total-fluid" style="vertical-align:bottom;">';
+										html += '<table class="list-item-height total-fluid list-cover-title-bg">';
+											html += '<tr class="total-fluid">';
+												html += '<td class="title-color container-fluid list-item-title" style="vertical-align:center;">';
+													if(show_list_item_date)												
+														html += '<div class="list-item-title-date">' + DateUtils.ApplyDateFormat("|D|/|M|/|Y|", [d.getFullYear(), d.getMonth(), d.getDate()]) + '</div>';											
+													if(json_feed["feed"]["entry"][i].title["$t"].length > 70)
+														html += '<div>' + json_feed["feed"]["entry"][i].title["$t"].substr(0, 70) + '...</div>';
+													else
+														html += '<div>' + json_feed["feed"]["entry"][i].title["$t"] + '</div>';
+												html += '</td>';
+												html += '<td class="arrow-color" style="width:26px;" style="vertical-align:center;"><span class="glyphicon glyphicon-chevron-right list-item-arrow" aria-hidden="true"></span></td>';
+											html += '</tr>';
+										html += '</table>';
+									html += '</td>';
+								html += '</tr>';
+							html += '</table>';
+						html += '</div>';
+							
+					/* item do feed (padrão)  */
+					}else{
+						html += '<div class="list-item" item-id="' + i + '">';
+							html += '<table class="list-item-height total-fluid">';
+								html += '<tr class="total-fluid">';
+								if(show_list_item_thumbnail == true && json_feed["feed"]["entry"][i]["media$thumbnail"] != null && json_feed["feed"]["entry"][i]["media$thumbnail"]["url"] != null && json_feed["feed"]["entry"][i]["media$thumbnail"]["url"] != "")
+									html += '<td class="list-item-thumbnail-size"><img class="list-item-thumbnail-size" src="' + json_feed["feed"]["entry"][i]["media$thumbnail"].url + '" /></td>';
+								
+								html += '<td class="title-color container-fluid list-item-title" style="vertical-align:center;">';
+									if(show_list_item_date)												
+										html += '<div class="list-item-title-date">' + DateUtils.ApplyDateFormat("|D|/|M|/|Y|", [d.getFullYear(), d.getMonth(), d.getDate()]) + '</div>';											
+									if(json_feed["feed"]["entry"][i].title["$t"].length > 70)
+										html += '<div>' + json_feed["feed"]["entry"][i].title["$t"].substr(0, 70) + '...</div>';
+									else
+										html += '<div>' + json_feed["feed"]["entry"][i].title["$t"] + '</div>';
+								html += '</td>';
+								html += '<td class="arrow-color" style="width:26px;" style="vertical-align:center;"><span class="glyphicon glyphicon-chevron-right list-item-arrow" aria-hidden="true"></span></td>';
+								html += '</tr>';
+							html += '</table>';
+						html += '</div>';
+						
+						/* separator  */
+						html += '<div class="list-item-separator separator-color"></div>';
+					}
+					html += '</div>';
+					
+					$("#feed").append(html);
+				}
+				
+				$(".list-item").click(function(){						
+					document.location.hash = "item_" + $(this).attr("item-id");	
+				});
+			}
+		});
 	});
 	
 	
@@ -168,99 +262,6 @@
 			}
 		}
 	}
-	
-	$(function(){
-		$("#image_viewer").css("display", "none");
-		$("#item_content").css("display", "none");
-		$("#feed").css("display", "block");
-					
-					
-		$(window).scroll(function () {
-			lastPageYOffset = $(window).scrollTop();
-				
-			if($("#image_viewer").css("display") == "block")
-				save_scroll["image"] = $(window).scrollTop();
-			else if($("#item_content").css("display") == "block")
-				save_scroll["item"] = $(window).scrollTop();
-			else if($("#feed").css("display") == "block")
-				save_scroll["list"] = $(window).scrollTop();					
-		});
-		$.ajax({
-			method: "GET",
-			dataType: "json",
-			url: CONFIGS["php_get_feed_url"],
-			data: {
-				url: CONFIGS["feed_url"]
-			}
-		}).done(function(json_feed){
-			feed = json_feed;
-			if(json_feed["feed"] != null){						
-				$("#feed").empty();
-				
-				for(var i=0; i<json_feed["feed"]["entry"].length; i++){
-					var html = '<div class="total-fluid">';
-					var d = new Date(json_feed["feed"]["entry"][i].published["$t"]);
-					
-					/* imagem principal da lista de itens do feed + dados  */
-					if(show_list_cover == true && i == 0){
-						html += '<div class="list-item total-fluid list-cover-background list-cover-height" item-id="' + i + '" style="background-image:url(' + GetFirstImgUrlFromContent(json_feed["feed"]["entry"][i]["content"]["$t"]) + ');">';
-							
-							html += '<table class="total-fluid list-cover-height">';
-								html += '<tr class="total-fluid">';
-									html += '<td class="total-fluid" style="vertical-align:bottom;">';
-										html += '<table class="list-item-height total-fluid list-cover-title-bg">';
-											html += '<tr class="total-fluid">';
-												html += '<td class="title-color container-fluid list-item-title" style="vertical-align:center;">';
-													if(show_list_item_date)												
-														html += '<div class="list-item-title-date">' + DateUtils.ApplyDateFormat("|D|/|M|/|Y|", [d.getFullYear(), d.getMonth(), d.getDate()]) + '</div>';											
-													if(json_feed["feed"]["entry"][i].title["$t"].length > 70)
-														html += '<div>' + json_feed["feed"]["entry"][i].title["$t"].substr(0, 70) + '...</div>';
-													else
-														html += '<div>' + json_feed["feed"]["entry"][i].title["$t"] + '</div>';
-												html += '</td>';
-												html += '<td class="arrow-color" style="width:26px;" style="vertical-align:center;"><span class="glyphicon glyphicon-chevron-right list-item-arrow" aria-hidden="true"></span></td>';
-											html += '</tr>';
-										html += '</table>';
-									html += '</td>';
-								html += '</tr>';
-							html += '</table>';
-						html += '</div>';
-							
-					/* item do feed (padrão)  */
-					}else{
-						html += '<div class="list-item" item-id="' + i + '">';
-							html += '<table class="list-item-height total-fluid">';
-								html += '<tr class="total-fluid">';
-								if(show_list_item_thumbnail == true && json_feed["feed"]["entry"][i]["media$thumbnail"] != null && json_feed["feed"]["entry"][i]["media$thumbnail"]["url"] != null && json_feed["feed"]["entry"][i]["media$thumbnail"]["url"] != "")
-									html += '<td class="list-item-thumbnail-size"><img class="list-item-thumbnail-size" src="' + json_feed["feed"]["entry"][i]["media$thumbnail"].url + '" /></td>';
-								
-								html += '<td class="title-color container-fluid list-item-title" style="vertical-align:center;">';
-									if(show_list_item_date)												
-										html += '<div class="list-item-title-date">' + DateUtils.ApplyDateFormat("|D|/|M|/|Y|", [d.getFullYear(), d.getMonth(), d.getDate()]) + '</div>';											
-									if(json_feed["feed"]["entry"][i].title["$t"].length > 70)
-										html += '<div>' + json_feed["feed"]["entry"][i].title["$t"].substr(0, 70) + '...</div>';
-									else
-										html += '<div>' + json_feed["feed"]["entry"][i].title["$t"] + '</div>';
-								html += '</td>';
-								html += '<td class="arrow-color" style="width:26px;" style="vertical-align:center;"><span class="glyphicon glyphicon-chevron-right list-item-arrow" aria-hidden="true"></span></td>';
-								html += '</tr>';
-							html += '</table>';
-						html += '</div>';
-						
-						/* separator  */
-						html += '<div class="list-item-separator separator-color"></div>';
-					}
-					html += '</div>';
-					
-					$("#feed").append(html);
-				}
-				
-				$(".list-item").click(function(){						
-					document.location.hash = "item_" + $(this).attr("item-id");	
-				});
-			}
-		});
-	});
 	
 	/* pega a url da primeira imagem encontrada num conteúdo de feed  */
 	function GetFirstImgUrlFromContent(_string_content){
