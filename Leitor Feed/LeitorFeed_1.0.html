@@ -1,0 +1,216 @@
+<!-- require https://github.com/estanamaoapps/Framework/raw/master/Utilidades/Data.html -->
+
+<div id="all_contents">
+	<div id="feed" class="total-fluid" style="display:block;"></div>	
+	<div id="item_content" class="total-fluid" style="display:none;"></div>
+	<div id="image_viewer" class="total-fluid" style="display:none;"></div>
+</div>
+
+<script type="text/javascript">
+	var php_get_feed_url = "http://plataforma.aplicativoscolmeia.com.br/estanamao_framework/feed_utils/get.php";	
+	
+	/* se é para mostrar a primeira imagem do primeiro artigo como capa da lista de artigos ("item") */
+	var show_list_cover = true;
+	/* se é para mostrar o título na pagina do artigo  */
+	var show_page_item_title = false;
+	/* se é para mostrar o título na pagina do artigo  */
+	var show_list_item_thumbnail = false;
+	/* se é para mostrar a data nos itens da lista de artigos  */
+	var show_list_item_date = true;
+	
+	var feed = null;
+	var lastPageYOffset = -1;		
+	var feed_selected_item_images = null;
+	
+	var save_scroll = {"list":0, "image":0, "item": 0};
+	
+	window.onhashchange = function(){
+		
+		$(".content-part").width($( window ).width() / 4);
+		
+		if(document.location.hash == "#" || document.location.hash == ""){									
+			
+			/*$("#all_contents").animate({
+			  "opacity": "0"
+				}, 300, "linear", function() {		*/
+					$("body").css("overflow-x", "hidden");
+					$("#image_viewer").css("display", "none");
+					$("#item_content").css("display", "none");
+					$("#feed").css("display", "block");
+					
+					save_scroll["image"] = 0;
+					save_scroll["item"] = 0;
+					$(window).scrollTop(save_scroll["list"]);
+					/*$("#all_contents").animate({"opacity": "1"}, 200, "linear");
+			});	*/
+			
+				
+		}else{
+			var hash_array = document.location.hash.split("_");					
+			
+			/* mostra o conteudo do item do feed  */
+			if(hash_array[0] == "#item"){
+				
+				/*$("#all_contents").animate({
+				  "opacity": "0"
+					}, 300, "linear", function() {		*/
+						var item_data = feed["feed"]["entry"][parseInt(hash_array[1])];
+				
+						if(item_data["content"] != null && item_data["content"]["$t"] != null){
+							if(show_page_item_title == true)
+								$("#item_content").html('<div class="feed-item-page-title feed-item-page-title-color">' + item_data["title"]["$t"] + '</div>');
+							$("#item_content").append('<div class="feed-item-page font-color">' + item_data["content"]["$t"] + '</div>');
+						}else{
+							$("#item_content").html("");
+						}
+						
+						/* pega a url da imagem e desabilita o link dela  */
+						var array_images = $("#item_content img").toArray();
+						feed_selected_item_images = [];
+						for(var i in array_images){
+							if($(array_images[i]).parent() != null && $(array_images[i]).parent().attr("href") != null && $(array_images[i]).parent().attr("href") != ""){
+								feed_selected_item_images[parseInt(i)] = $(array_images[i]).parent().attr("href");
+								$(array_images[i]).parent().attr("href", "");
+							}else{
+								feed_selected_item_images[parseInt(i)] = $(array_images[i]).attr("src");
+							}
+							$(array_images[i]).parent().attr("onclick", "return false;");
+							
+							$(array_images[i]).click({"index":i}, function(e){										
+								document.location.hash = "image_" + e.data.index;
+							});									
+						}								
+						$("body").css("overflow-x", "hidden");
+						$("#item_content").css("display", "block");
+						$("#feed").css("display", "none");
+						$("#image_viewer").css("display", "none");
+						
+						save_scroll["image"] = 0;
+						$(window).scrollTop(save_scroll["item"]);
+						
+						/*$("#all_contents").animate({"opacity": "1"}, 200, "linear");
+				});		*/					
+				
+				
+			/* mostra uma imagem  */
+			}else if(hash_array[0] == "#image"){
+				
+				/*$("#all_contents").animate({
+				  "opacity": "0"
+					}, 300, "linear", function() {		*/
+						
+						array_images = $("#item_content img").toArray();
+						$("body").css("overflow-x", "scroll");
+						$("#image_viewer").html('<img src="' + feed_selected_item_images[parseInt(hash_array[1])] + '"/>');
+						
+						$("#image_viewer").css("display", "block");
+						$("#item_content").css("display", "none");
+						$("#feed").css("display", "none");
+						
+						$(window).scrollTop(save_scroll["image"]);
+						/*$("#all_contents").animate({"opacity": "1"}, 200, "linear");
+				});	*/						
+			}
+		}
+	}
+	
+	$(function(){
+		$(window).scroll(function () {
+			lastPageYOffset = $(window).scrollTop();
+				
+			if($("#image_viewer").css("display") == "block")
+				save_scroll["image"] = $(window).scrollTop();
+			else if($("#item_content").css("display") == "block")
+				save_scroll["item"] = $(window).scrollTop();
+			else if($("#feed").css("display") == "block")
+				save_scroll["list"] = $(window).scrollTop();					
+		});
+		$.ajax({
+			method: "GET",
+			dataType: "json",
+			url: php_get_feed_url,
+			data: {
+				url: GET["feed_url"]
+			}
+		}).done(function(json_feed){
+			feed = json_feed;
+			if(json_feed["feed"] != null){						
+				for(var i=0; i<json_feed["feed"]["entry"].length; i++){
+					var html = '<div class="total-fluid">';
+					var d = new Date(json_feed["feed"]["entry"][i].published["$t"]);
+					
+					/* imagem principal da lista de itens do feed + dados  */
+					if(show_list_cover == true && i == 0){
+						html += '<div class="list-item total-fluid list-cover-background list-cover-height" item-id="' + i + '" style="background-image:url(' + GetFirstImgUrlFromContent(json_feed["feed"]["entry"][i]["content"]["$t"]) + ');">';
+							
+							html += '<table class="total-fluid list-cover-height">';
+								html += '<tr class="total-fluid">';
+									html += '<td class="total-fluid" style="vertical-align:bottom;">';
+										html += '<table class="list-item-height total-fluid list-cover-title-bg">';
+											html += '<tr class="total-fluid">';
+												html += '<td class="title-color container-fluid list-item-title" style="vertical-align:center;">';
+													if(show_list_item_date)												
+														html += '<div class="list-item-title-date">' + DateUtils.ApplyDateFormat("|D|/|M|/|Y|", [d.getFullYear(), d.getMonth(), d.getDate()]) + '</div>';											
+													if(json_feed["feed"]["entry"][i].title["$t"].length > 70)
+														html += '<div>' + json_feed["feed"]["entry"][i].title["$t"].substr(0, 70) + '...</div>';
+													else
+														html += '<div>' + json_feed["feed"]["entry"][i].title["$t"] + '</div>';
+												html += '</td>';
+												html += '<td class="arrow-color" style="width:26px;" style="vertical-align:center;"><span class="glyphicon glyphicon-chevron-right list-item-arrow" aria-hidden="true"></span></td>';
+											html += '</tr>';
+										html += '</table>';
+									html += '</td>';
+								html += '</tr>';
+							html += '</table>';
+						html += '</div>';
+							
+					/* item do feed (padrão)  */
+					}else{
+						html += '<div class="list-item" item-id="' + i + '">';
+							html += '<table class="list-item-height total-fluid">';
+								html += '<tr class="total-fluid">';
+								if(show_list_item_thumbnail == true && json_feed["feed"]["entry"][i]["media$thumbnail"] != null && json_feed["feed"]["entry"][i]["media$thumbnail"]["url"] != null && json_feed["feed"]["entry"][i]["media$thumbnail"]["url"] != "")
+									html += '<td class="list-item-thumbnail-size"><img class="list-item-thumbnail-size" src="' + json_feed["feed"]["entry"][i]["media$thumbnail"].url + '" /></td>';
+								
+								html += '<td class="title-color container-fluid list-item-title" style="vertical-align:center;">';
+									if(show_list_item_date)												
+										html += '<div class="list-item-title-date">' + DateUtils.ApplyDateFormat("|D|/|M|/|Y|", [d.getFullYear(), d.getMonth(), d.getDate()]) + '</div>';											
+									if(json_feed["feed"]["entry"][i].title["$t"].length > 70)
+										html += '<div>' + json_feed["feed"]["entry"][i].title["$t"].substr(0, 70) + '...</div>';
+									else
+										html += '<div>' + json_feed["feed"]["entry"][i].title["$t"] + '</div>';
+								html += '</td>';
+								html += '<td class="arrow-color" style="width:26px;" style="vertical-align:center;"><span class="glyphicon glyphicon-chevron-right list-item-arrow" aria-hidden="true"></span></td>';
+								html += '</tr>';
+							html += '</table>';
+						html += '</div>';
+						
+						/* separator  */
+						html += '<div class="list-item-separator separator-color"></div>';
+					}
+					html += '</div>';
+					
+					$("#feed").append(html);
+				}
+				
+				$(".list-item").click(function(){						
+					document.location.hash = "item_" + $(this).attr("item-id");	
+				});
+			}
+		});
+	});
+	
+	/* pega a url da primeira imagem encontrada num conteúdo de feed  */
+	function GetFirstImgUrlFromContent(_string_content){
+		var url = "";
+		var array = _string_content.split("<img", 2);				
+		if(array.length >= 2){
+			var array2 = array[1].split('src="', 2);
+			if(array2.length >= 2){
+				url = array2[1].split('"', 2)[0];
+			}
+		}
+		
+		return url;
+	}			
+</script>
