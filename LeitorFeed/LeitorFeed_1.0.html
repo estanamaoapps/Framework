@@ -75,26 +75,8 @@
 			}
 		}).done(function(json_feed){
 			FEED = json_feed;
-			if(json_feed["feed"] != null){						
-				$("#feed").empty();
-				
-				var hash_array = document.location.hash.split("_");
-				
-				// mostra diretamente o conteúdo do primeiro artigo
-				if(hash_array[0] == "#item"){
-					RefreshByHashtag();
-				
-				// lista de artigos (itens)
-				}else{
-					for(var i=0; i<json_feed["feed"]["entry"].length; i++){
-						AttachListItem(i, json_feed["feed"]["entry"][i]);
-					}
-					
-					$(".list-item").click(function(){						
-						document.location.hash = "item_" + $(this).attr("item-id");	
-					});
-				}
-			}
+			if(json_feed["feed"] != null)
+				RefreshByHashtag();
 		});	
 	}
 	
@@ -158,6 +140,14 @@
 	function RefreshByHashtag(){
 		// LISTA DE ITENS DO FEED
 		if(document.location.hash == "#" || document.location.hash == ""){						
+			$("#feed").empty();
+			for(var i=0; i<FEED["feed"]["entry"].length; i++){
+				AttachListItem(i, FEED["feed"]["entry"][i]);
+			}
+			$(".list-item").click(function(){						
+				document.location.hash = "item_" + $(this).attr("item-id");	
+			});
+			
 			$("#image_viewer").css("display", "none");
 			$("#item_content").css("display", "none");
 			$("#feed").css("display", "block");
