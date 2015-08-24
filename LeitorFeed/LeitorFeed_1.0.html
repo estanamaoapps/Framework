@@ -68,16 +68,18 @@
 	
 	function AttachListItem(_index, _item_data){
 		
-		var item = $('<div></div>');
+		var item = $('<div class="list-item" item-id="' + _index + '"></div>');
 		var html = "";
 		// item de capa da lista de itens (artigos)
 		if(_index == 0 && LAYOUTS["feed_list_cover"] != null){
-			html += LAYOUTS["feed_list_cover"];
+			html += LAYOUTS["feed_list_cover"](_item_data);
 		// itens normal
 		}else if(LAYOUTS["feed_list_item"] != null){
-			html += LAYOUTS["feed_list_item"];
+			html += LAYOUTS["feed_list_item"](_item_data);
 		}
 		item.append(html);
+		$("#feed").append(item);
+		/*
 		// inserindo dados nos itens
 		var c_array = $(item).find( ".feed-data" ).toArray();
 		for(var i in c_array){
@@ -106,9 +108,8 @@
 					}
 				}
 			}
-		}			
+		}		*/		
 		
-		$("#feed").append(item);
 	
 		/*var html = '<div class="total-fluid">';
 		var d = new Date(json_feed["feed"]["entry"][i].published["$t"]);
