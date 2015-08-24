@@ -187,7 +187,7 @@
 				// lista de artigos (itens)
 				}else{
 					for(var i=0; i<json_feed["feed"]["entry"].length; i++){
-						AttachListItem(json_feed["feed"]["entry"][i]);
+						AttachListItem(i, json_feed["feed"]["entry"][i]);
 					}
 					
 					$(".list-item").click(function(){						
