@@ -1,15 +1,13 @@
 <!-- require_once https://github.com/estanamaoapps/Framework/raw/master/Utilidades/Data.html -->
 
-<div id="all_contents">
-	<div id="feed" class="total-fluid" style="overflow-x:hidden; overflow-y:auto;">
-		<div id="feed_container"></div>
-	</div>	
-	<div id="item_content" class="total-fluid" style="overflow-x:hidden; overflow-y:auto;">
-		<div id="item_content_container"></div>
-	</div>
-	<div id="image_viewer" class="total-fluid" style="overflow-x:auto; overflow-y:auto;">
-		<div id="image_viewer_container"></div>
-	</div>
+<div id="feed" class="total-fluid" style="overflow-x:hidden; overflow-y:auto;">
+	<div id="feed_container"></div>
+</div>	
+<div id="item_content" class="total-fluid" style="overflow-x:hidden; overflow-y:auto;">
+	<div id="item_content_container"></div>
+</div>
+<div id="image_viewer" class="total-fluid" style="overflow-x:auto; overflow-y:auto;">
+	<div id="image_viewer_container"></div>
 </div>
 
 <script type="text/javascript">
@@ -227,10 +225,14 @@
 	
 	*****************************************************************************************/
 	$( window ).resize(function() {
+		AdjustContainers();
+	});
+	
+	function AdjustContainers(){
 		$("#image_viewer").height($( window ).height());
 		$("#item_content").height($( window ).height());
 		$("#feed").height($( window ).height());
-	});
+	}
 	
 	// On Load Document
 	$(function(){
