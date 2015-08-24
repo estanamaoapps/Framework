@@ -1,8 +1,58 @@
+<!-- require_once https://github.com/estanamaoapps/Framework/raw/master/Utilidades/Data.html -->
+
 <script type="text/javascript">
 	
-	var LAYOUTS = {
-		'feed_list_item': '<table><tr><td></td><tr></table>',
-		'feed_list_cover': '<table><tr><td></td><tr></table>'
-	};
+	var Layout = function(){};
+	
+	Layout.layouts = {
+		'feed_list_cover': function(_data){
+			var d = new Date(_data.published["$t"]);
+			var html = '';
+			// thumbnail
+			html += '<div class="total-fluid list-cover-background list-cover-height" style="background-image:url(' + Layout.GetFirstImgUrlFromContent(_data["content"]["$t"]) + ');">';
+				
+				html += '<table class="total-fluid list-cover-height">';
+					html += '<tr class="total-fluid">';
+						html += '<td class="total-fluid" style="vertical-align:bottom;">';
+							html += '<table class="list-item-height total-fluid list-cover-title-bg">';
+								html += '<tr class="total-fluid">';
+									html += '<td class="title-color container-fluid list-item-title" style="vertical-align:center;">';
+										// data
+										if(show_list_item_date)												
+											html += '<div class="list-item-title-date">' + DateUtils.ApplyDateFormat("|D|/|M|/|Y|", [d.getFullYear(), d.getMonth(), d.getDate()]) + '</div>';
+										
+										// titulo
+										if(_data.title["$t"].length > 70)
+											html += '<div>' + _data.title["$t"].substr(0, 70) + '...</div>';
+										else
+											html += '<div>' + _data.title["$t"] + '</div>';
+									html += '</td>';
+									html += '<td class="arrow-color" style="width:26px;" style="vertical-align:center;"><span class="glyphicon glyphicon-chevron-right list-item-arrow" aria-hidden="true"></span></td>';
+								html += '</tr>';
+							html += '</table>';
+						html += '</td>';
+					html += '</tr>';
+				html += '</table>';
+			html += '</div>';	
 
+			return html;
+		},
+		'feed_list_item': function(_data){
+			return "";
+		}
+	};
+	
+	// pega a url da primeira imagem encontrada num conteúdo do feed
+	Layout.GetFirstImgUrlFromContent = function(_string_content){
+		var url = "";
+		var array = _string_content.split("<img", 2);				
+		if(array.length >= 2){
+			var array2 = array[1].split('src="', 2);
+			if(array2.length >= 2){
+				url = array2[1].split('"', 2)[0];
+			}
+		}
+		
+		return url;
+	};	
 </script>
