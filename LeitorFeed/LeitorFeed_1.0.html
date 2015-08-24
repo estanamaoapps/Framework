@@ -68,14 +68,14 @@
 	
 	function AttachListItem(_index, _item_data){
 		
-		var item = $('<div class="list-item" item-id="' + _index + '"></div>');
+		var item = $('<div class="list-item total-fluid" item-id="' + _index + '"></div>');
 		var html = "";
 		// item de capa da lista de itens (artigos)
-		if(_index == 0 && LAYOUTS["feed_list_cover"] != null){
-			html += LAYOUTS["feed_list_cover"](_item_data);
+		if(_index == 0 && Layout.layouts["feed_list_cover"] != null){
+			html += Layout.layouts["feed_list_cover"](_item_data);
 		// itens normal
-		}else if(LAYOUTS["feed_list_item"] != null){
-			html += LAYOUTS["feed_list_item"](_item_data);
+		}else if(Layout.layouts["feed_list_item"] != null){
+			html += Layout.layouts["feed_list_item"](_item_data);
 		}
 		item.append(html);
 		$("#feed").append(item);
@@ -294,18 +294,4 @@
 		// ajusta o tamanho das divs que contem os conteúdos do feed
 		AdjustContainers();
 	});
-	
-	// pega a url da primeira imagem encontrada num conteúdo de feed
-	function GetFirstImgUrlFromContent(_string_content){
-		var url = "";
-		var array = _string_content.split("<img", 2);				
-		if(array.length >= 2){
-			var array2 = array[1].split('src="', 2);
-			if(array2.length >= 2){
-				url = array2[1].split('"', 2)[0];
-			}
-		}
-		
-		return url;
-	}			
 </script>
