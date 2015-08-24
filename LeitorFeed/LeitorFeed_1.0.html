@@ -66,8 +66,49 @@
 	*****************************************************************************************/
 	var FEED = null;
 	
-	function AttachListItem(_item_data){
+	function AttachListItem(_index, _item_data){
 		
+		var item = $('<div></div>');
+		var html = "";
+		// item de capa da lista de itens (artigos)
+		if(_index == 0 && LAYOUTS["feed_list_cover"] != null){
+			html += LAYOUTS["feed_list_cover"];
+		// itens normal
+		}else if(LAYOUTS["feed_list_item"] != null){
+			html += LAYOUTS["feed_list_item"];
+		}
+		item.append(html);
+		// inserindo dados nos itens
+		var c_array = $(item).find( ".feed-data" ).toArray();
+		for(var i in c_array){
+			var p = $(c_array[i]).attr("target-data-path");
+			var type = $(c_array[i]).attr("target-data-type");
+			if(p != null && p != ""){
+				var t_array = p.split("/");
+				var last_array_elem = _item_data;
+				for(var u=0; u<t_array.length; u++){
+					last_array_elem = last_array_elem[t_array[u]];
+					// insere os dados
+					if(u == t_array.length - 1){
+						switch(type){
+							case "text":
+								$(c_array[i]).html(last_array_elem);
+							break;							
+							case "first_image_as_bg":
+								// primeira tag <img> num texto
+								$(c_array[i]).css("background-image", GetFirstImgUrlFromContent(last_array_elem));
+							break;
+							case "date":
+							var date = new Date(last_array_elem);
+								$(c_array[i]).html(DateUtils.ApplyDateFormat($(c_array[i]).attr("date-type"), [date.getFullYear(), date.getMonth(), date.getDate()]));
+							break;
+						}						
+					}
+				}
+			}
+		}			
+		
+		$("#feed").append(item);
 	
 		/*var html = '<div class="total-fluid">';
 		var d = new Date(json_feed["feed"]["entry"][i].published["$t"]);
@@ -186,16 +227,18 @@
 	}
 	
 	function AttachImageViewer(_image_index){
-		array_images = $("#item_content_container img").toArray();
-		//$("body").css("overflow-x", "scroll");
+		array_images = $("#item_content_container img").toArray();		
 		$("#image_viewer").html('<img src="' + feed_selected_item_images[parseInt(_image_index)] + '"/>');
 	}
 	
 	window.onhashchange = function(){
 		
 		// LISTA DE ITENS DO FEED
-		if(document.location.hash == "#" || document.location.hash == ""){			
-		
+		if(document.location.hash == "#" || document.location.hash == ""){						
+			$("#image_viewer").css("display", "none");
+			$("#item_content").css("display", "none");
+			$("#feed").css("display", "block");
+					
 		}else{
 			var hash_array = document.location.hash.split("_");					
 			
@@ -203,7 +246,6 @@
 			if(hash_array[0] == "#item"){
 				AttachItemPage(hash_array[1]);
 				
-				//$("body").css("overflow-x", "hidden");
 				$("#item_content").css("display", "block");
 				$("#feed").css("display", "none");
 				$("#image_viewer").css("display", "none");
@@ -247,6 +289,9 @@
 		
 		// construtor do feed
 		GetAndAttachFeed();
+		
+		// ajusta o tamanho das divs que contem os conteúdos do feed
+		AdjustContainers();
 	});
 	
 	// pega a url da primeira imagem encontrada num conteúdo de feed
