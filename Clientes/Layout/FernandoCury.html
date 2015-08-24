@@ -23,10 +23,7 @@
 											html += '<div class="list-item-title-date">' + DateUtils.ApplyDateFormat("|D|/|M|/|Y|", [d.getFullYear(), d.getMonth(), d.getDate()]) + '</div>';
 										
 										// titulo
-										if(_data.title["$t"].length > 70)
-											html += '<div style="height:40px; overflow:hidden;">' + _data.title["$t"].substr(0, 70) + '...</div>';
-										else
-											html += '<div style="height:40px; overflow:hidden;">' + _data.title["$t"] + '</div>';
+										html += '<div style="height:40px; overflow:hidden;">' + _data.title["$t"] + '</div>';
 									html += '</td>';
 									html += '<td class="arrow-color" style="width:26px;" style="vertical-align:center;"><span class="glyphicon glyphicon-chevron-right list-item-arrow" aria-hidden="true"></span></td>';
 								html += '</tr>';
@@ -54,10 +51,7 @@
 						html += '<div class="list-item-title-date">' + DateUtils.ApplyDateFormat("|D|/|M|/|Y|", [d.getFullYear(), d.getMonth(), d.getDate()]) + '</div>';											
 					
 					// titulo
-					if(_data.title["$t"].length > 70)
-						html += '<div style="height:40px; overflow:hidden;">' + _data.title["$t"].substr(0, 70) + '...</div>';
-					else
-						html += '<div style="height:40px; overflow:hidden;">' + _data.title["$t"] + '</div>';
+					html += '<div style="height:40px; overflow:hidden;">' + _data.title["$t"] + '</div>';
 				html += '</td>';
 				html += '<td class="arrow-color" style="width:26px;" style="vertical-align:center;"><span class="glyphicon glyphicon-chevron-right list-item-arrow" aria-hidden="true"></span></td>';
 				html += '</tr>';
