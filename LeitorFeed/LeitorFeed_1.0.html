@@ -25,9 +25,6 @@
 		// url para o php que pega o feed (geralmente está na plataforma por questões de erros de segurança)
 		"php_get_feed_url": "http://plataforma.aplicativoscolmeia.com.br/estanamao_framework/feed_utils/get.php",
 		
-		// quando verdadeiro, apenas o primeiro artigo é mostrado diretamente com seu conteúdo (como uma página)
-		"show_first_item_only": false,
-		
 		// se é para mostrar a primeira imagem do primeiro artigo como capa da lista de artigos ("item")
 		"show_list_cover": true,
 		
@@ -81,9 +78,11 @@
 			if(json_feed["feed"] != null){						
 				$("#feed").empty();
 				
+				var hash_array = document.location.hash.split("_");
+				
 				// mostra diretamente o conteúdo do primeiro artigo
-				if(CONFIGS["show_first_item_only"] == true){
-					document.location.hash = "item_0";
+				if(hash_array[0] == "#item"){
+					RefreshByHashtag();
 				
 				// lista de artigos (itens)
 				}else{
@@ -153,7 +152,10 @@
 	
 	// quando a hashtag (#) da URL é modificada
 	window.onhashchange = function(){
-		
+		RefreshByHashtag();
+	}
+	// atualizao conteúdo de acordo com o parametro indicado na hashtag (#)
+	function RefreshByHashtag(){
 		// LISTA DE ITENS DO FEED
 		if(document.location.hash == "#" || document.location.hash == ""){						
 			$("#image_viewer").css("display", "none");
