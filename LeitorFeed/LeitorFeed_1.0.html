@@ -1,13 +1,13 @@
 <!-- require_once https://github.com/estanamaoapps/Framework/raw/master/Utilidades/Data.html -->
 
 <div id="feed" class="total-fluid" style="overflow-x:hidden; overflow-y:auto;">
-	<div id="feed_container"></div>
+	<div id="feed_container" class="scrollable-container"></div>
 </div>	
 <div id="item_content" class="total-fluid" style="overflow-x:hidden; overflow-y:auto;">
-	<div id="item_content_container"></div>
+	<div id="item_content_container" class="scrollable-container"></div>
 </div>
 <div id="image_viewer" class="total-fluid" style="overflow-x:auto; overflow-y:auto;">
-	<div id="image_viewer_container"></div>
+	<div id="image_viewer_container" class="scrollable-container"></div>
 </div>
 
 <script type="text/javascript">
@@ -64,109 +64,10 @@
 	! FEED
 	
 	*****************************************************************************************/
+	// dados do feed
 	var FEED = null;
 	
-	function AttachListItem(_index, _item_data){
-		
-		var item = $('<div class="list-item total-fluid" item-id="' + _index + '"></div>');
-		var html = "";
-		// item de capa da lista de itens (artigos)
-		if(_index == 0 && Layout.layouts["feed_list_cover"] != null){
-			html += Layout.layouts["feed_list_cover"](_item_data);
-		// itens normal
-		}else if(Layout.layouts["feed_list_item"] != null){
-			html += Layout.layouts["feed_list_item"](_item_data);
-		}
-		item.append(html);
-		$("#feed").append(item);
-		/*
-		// inserindo dados nos itens
-		var c_array = $(item).find( ".feed-data" ).toArray();
-		for(var i in c_array){
-			var p = $(c_array[i]).attr("target-data-path");
-			var type = $(c_array[i]).attr("target-data-type");
-			if(p != null && p != ""){
-				var t_array = p.split("/");
-				var last_array_elem = _item_data;
-				for(var u=0; u<t_array.length; u++){
-					last_array_elem = last_array_elem[t_array[u]];
-					// insere os dados
-					if(u == t_array.length - 1){
-						switch(type){
-							case "text":
-								$(c_array[i]).html(last_array_elem);
-							break;							
-							case "first_image_as_bg":
-								// primeira tag <img> num texto
-								$(c_array[i]).css("background-image", GetFirstImgUrlFromContent(last_array_elem));
-							break;
-							case "date":
-							var date = new Date(last_array_elem);
-								$(c_array[i]).html(DateUtils.ApplyDateFormat($(c_array[i]).attr("date-type"), [date.getFullYear(), date.getMonth(), date.getDate()]));
-							break;
-						}						
-					}
-				}
-			}
-		}		*/		
-		
-	
-		/*var html = '<div class="total-fluid">';
-		var d = new Date(json_feed["feed"]["entry"][i].published["$t"]);
-		
-		// imagem principal da lista de itens do feed + dados
-		if(show_list_cover == true && i == 0){
-			html += '<div class="list-item total-fluid list-cover-background list-cover-height" item-id="' + i + '" style="background-image:url(' + GetFirstImgUrlFromContent(json_feed["feed"]["entry"][i]["content"]["$t"]) + ');">';
-				
-				html += '<table class="total-fluid list-cover-height">';
-					html += '<tr class="total-fluid">';
-						html += '<td class="total-fluid" style="vertical-align:bottom;">';
-							html += '<table class="list-item-height total-fluid list-cover-title-bg">';
-								html += '<tr class="total-fluid">';
-									html += '<td class="title-color container-fluid list-item-title" style="vertical-align:center;">';
-										if(show_list_item_date)												
-											html += '<div class="list-item-title-date">' + DateUtils.ApplyDateFormat("|D|/|M|/|Y|", [d.getFullYear(), d.getMonth(), d.getDate()]) + '</div>';											
-										if(json_feed["feed"]["entry"][i].title["$t"].length > 70)
-											html += '<div>' + json_feed["feed"]["entry"][i].title["$t"].substr(0, 70) + '...</div>';
-										else
-											html += '<div>' + json_feed["feed"]["entry"][i].title["$t"] + '</div>';
-									html += '</td>';
-									html += '<td class="arrow-color" style="width:26px;" style="vertical-align:center;"><span class="glyphicon glyphicon-chevron-right list-item-arrow" aria-hidden="true"></span></td>';
-								html += '</tr>';
-							html += '</table>';
-						html += '</td>';
-					html += '</tr>';
-				html += '</table>';
-			html += '</div>';
-				
-		// item do feed (padrão) 
-		}else{
-			html += '<div class="list-item" item-id="' + i + '">';
-				html += '<table class="list-item-height total-fluid">';
-					html += '<tr class="total-fluid">';
-					if(show_list_item_thumbnail == true && json_feed["feed"]["entry"][i]["media$thumbnail"] != null && json_feed["feed"]["entry"][i]["media$thumbnail"]["url"] != null && json_feed["feed"]["entry"][i]["media$thumbnail"]["url"] != "")
-						html += '<td class="list-item-thumbnail-size"><img class="list-item-thumbnail-size" src="' + json_feed["feed"]["entry"][i]["media$thumbnail"].url + '" /></td>';
-					
-					html += '<td class="title-color container-fluid list-item-title" style="vertical-align:center;">';
-						if(show_list_item_date)												
-							html += '<div class="list-item-title-date">' + DateUtils.ApplyDateFormat("|D|/|M|/|Y|", [d.getFullYear(), d.getMonth(), d.getDate()]) + '</div>';											
-						if(json_feed["feed"]["entry"][i].title["$t"].length > 70)
-							html += '<div>' + json_feed["feed"]["entry"][i].title["$t"].substr(0, 70) + '...</div>';
-						else
-							html += '<div>' + json_feed["feed"]["entry"][i].title["$t"] + '</div>';
-					html += '</td>';
-					html += '<td class="arrow-color" style="width:26px;" style="vertical-align:center;"><span class="glyphicon glyphicon-chevron-right list-item-arrow" aria-hidden="true"></span></td>';
-					html += '</tr>';
-				html += '</table>';
-			html += '</div>';
-			
-			// separator
-			html += '<div class="list-item-separator separator-color"></div>';
-		}
-		html += '</div>';
-		
-		$("#feed").append(html);*/
-	}
+	// carrega o feed e manda criar a lista, mostrar o primeiro artigo, etc
 	function GetAndAttachFeed(){
 		$.ajax({
 			method: "GET",
@@ -180,7 +81,7 @@
 			if(json_feed["feed"] != null){						
 				$("#feed").empty();
 				
-				// mostra diretamete o conteúdo do primeiro artigo
+				// mostra diretamente o conteúdo do primeiro artigo
 				if(CONFIGS["show_first_item_only"] == true){
 					document.location.hash = "item_0";
 				
@@ -198,6 +99,23 @@
 		});	
 	}
 	
+	// anexa um item na lista do feed
+	function AttachListItem(_index, _item_data){
+		
+		var item = $('<div class="list-item total-fluid" item-id="' + _index + '"></div>');
+		var html = "";
+		// item de capa da lista de itens (artigos)
+		if(_index == 0 && Layout.layouts["feed_list_cover"] != null){
+			html += Layout.layouts["feed_list_cover"](_item_data);
+		// itens normal
+		}else if(Layout.layouts["feed_list_item"] != null){
+			html += Layout.layouts["feed_list_item"](_item_data);
+		}
+		item.append(html);
+		$("#feed").append(item);
+	}
+	
+	// cria a página para mostrar o conteúdo do artigo (item)
 	var feed_selected_item_images = null;
 	function AttachItemPage(_item_index){
 		var item_data = FEED["feed"]["entry"][parseInt(_item_index)];
@@ -227,11 +145,13 @@
 		}		
 	}
 	
+	// cria a página para mostrar a imagem que foi clicada
 	function AttachImageViewer(_image_index){
 		array_images = $("#item_content_container img").toArray();		
 		$("#image_viewer").html('<img src="' + feed_selected_item_images[parseInt(_image_index)] + '"/>');
 	}
 	
+	// quando a hashtag (#) da URL é modificada
 	window.onhashchange = function(){
 		
 		// LISTA DE ITENS DO FEED
