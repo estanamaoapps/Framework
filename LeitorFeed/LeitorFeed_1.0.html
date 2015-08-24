@@ -1,9 +1,15 @@
 <!-- require_once https://github.com/estanamaoapps/Framework/raw/master/Utilidades/Data.html -->
 
 <div id="all_contents">
-	<div id="feed" class="total-fluid"></div>	
-	<div id="item_content" class="total-fluid"></div>
-	<div id="image_viewer" class="total-fluid"></div>
+	<div id="feed" class="total-fluid" style="overflow-x:hidden; overflow-y:auto;">
+		<div id="feed_container"></div>
+	</div>	
+	<div id="item_content" class="total-fluid" style="overflow-x:hidden; overflow-y:auto;">
+		<div id="item_content_container"></div>
+	</div>
+	<div id="image_viewer" class="total-fluid" style="overflow-x:auto; overflow-y:auto;">
+		<div id="image_viewer_container"></div>
+	</div>
 </div>
 
 <script type="text/javascript">
@@ -62,7 +68,9 @@
 	*****************************************************************************************/
 	var FEED = null;
 	
-	function AttachListItem(){
+	function AttachListItem(_item_data){
+		
+	
 		/*var html = '<div class="total-fluid">';
 		var d = new Date(json_feed["feed"]["entry"][i].published["$t"]);
 		
@@ -139,7 +147,7 @@
 				// lista de artigos (itens)
 				}else{
 					for(var i=0; i<json_feed["feed"]["entry"].length; i++){
-						
+						AttachListItem(json_feed["feed"]["entry"][i]);
 					}
 					
 					$(".list-item").click(function(){						
@@ -154,15 +162,15 @@
 	function AttachItemPage(_item_index){
 		var item_data = FEED["feed"]["entry"][parseInt(_item_index)];
 					
-		$("#item_content").empty();
+		$("#item_content_container").empty();
 		if(item_data["content"] != null && item_data["content"]["$t"] != null){							
 			if(CONFIGS["show_page_item_title"] == true)
-				$("#item_content").html('<div class="feed-item-page-title feed-item-page-title-color">' + item_data["title"]["$t"] + '</div>');
-			$("#item_content").append('<div class="feed-item-page font-color">' + item_data["content"]["$t"] + '</div>');
+				$("#item_content_container").html('<div class="feed-item-page-title feed-item-page-title-color">' + item_data["title"]["$t"] + '</div>');
+			$("#item_content_container").append('<div class="feed-item-page font-color">' + item_data["content"]["$t"] + '</div>');
 		}
 		
 		/* pega a url da imagem e desabilita o link dela  */
-		var array_images = $("#item_content img").toArray();
+		var array_images = $("#item_content_container img").toArray();
 		feed_selected_item_images = [];
 		for(var i in array_images){
 			if($(array_images[i]).parent() != null && $(array_images[i]).parent().attr("href") != null && $(array_images[i]).parent().attr("href") != ""){
@@ -180,8 +188,8 @@
 	}
 	
 	function AttachImageViewer(_image_index){
-		array_images = $("#item_content img").toArray();
-		$("body").css("overflow-x", "scroll");
+		array_images = $("#item_content_container img").toArray();
+		//$("body").css("overflow-x", "scroll");
 		$("#image_viewer").html('<img src="' + feed_selected_item_images[parseInt(_image_index)] + '"/>');
 	}
 	
@@ -197,7 +205,7 @@
 			if(hash_array[0] == "#item"){
 				AttachItemPage(hash_array[1]);
 				
-				$("body").css("overflow-x", "hidden");
+				//$("body").css("overflow-x", "hidden");
 				$("#item_content").css("display", "block");
 				$("#feed").css("display", "none");
 				$("#image_viewer").css("display", "none");
@@ -218,6 +226,12 @@
 	! GENERAL
 	
 	*****************************************************************************************/
+	$( window ).resize(function() {
+		$("#image_viewer").height($( window ).height());
+		$("#item_content").height($( window ).height());
+		$("#feed").height($( window ).height());
+	});
+	
 	// On Load Document
 	$(function(){
 	
