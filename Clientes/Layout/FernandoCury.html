@@ -5,6 +5,7 @@
 	var Layout = function(){};
 	
 	Layout.layouts = {
+		// layout do item de capa da lista de itens do feed
 		'feed_list_cover': function(_data){
 			var d = new Date(_data.published["$t"]);
 			var html = '';
@@ -18,7 +19,7 @@
 								html += '<tr class="total-fluid">';
 									html += '<td class="title-color container-fluid list-item-title" style="vertical-align:center;">';
 										// data
-										if(CONFIGS["show_list_item_date"])												
+										if(CONFIGS["show_list_item_date"] == true)												
 											html += '<div class="list-item-title-date">' + DateUtils.ApplyDateFormat("|D|/|M|/|Y|", [d.getFullYear(), d.getMonth(), d.getDate()]) + '</div>';
 										
 										// titulo
@@ -37,8 +38,32 @@
 
 			return html;
 		},
+		// layout do item da lista de itens do feed
 		'feed_list_item': function(_data){
-			return "";
+			var d = new Date(_data.published["$t"]);
+			var html = '';
+						
+			html += '<table class="list-item-height total-fluid">';
+				html += '<tr class="total-fluid">';
+				if(CONFIGS["show_list_item_thumbnail"] == true && _data["media$thumbnail"] != null && _data["media$thumbnail"]["url"] != null && _data["media$thumbnail"]["url"] != "")
+					html += '<td class="list-item-thumbnail-size"><img class="list-item-thumbnail-size" src="' + _data["media$thumbnail"].url + '" /></td>';
+				
+				html += '<td class="title-color container-fluid list-item-title" style="vertical-align:center;">';
+					if(CONFIGS["show_list_item_date"] == true)												
+						html += '<div class="list-item-title-date">' + DateUtils.ApplyDateFormat("|D|/|M|/|Y|", [d.getFullYear(), d.getMonth(), d.getDate()]) + '</div>';											
+					if(_data.title["$t"].length > 70)
+						html += '<div>' + _data.title["$t"].substr(0, 70) + '...</div>';
+					else
+						html += '<div>' + _data.title["$t"] + '</div>';
+				html += '</td>';
+				html += '<td class="arrow-color" style="width:26px;" style="vertical-align:center;"><span class="glyphicon glyphicon-chevron-right list-item-arrow" aria-hidden="true"></span></td>';
+				html += '</tr>';
+			html += '</table>';			
+			
+			// separator
+			html += '<div class="list-item-separator separator-color"></div>';
+			
+			return html;
 		}
 	};
 	
