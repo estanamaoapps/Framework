@@ -1,0 +1,40 @@
+<iframe id="target" style="width:100%; height:100%;"></iframe>
+<body onload="OnLoad()">
+	<script type="text/javascript">
+		
+		// codigos que serao inseridos na tag Head
+		var head_codes = [];
+		head_codes[0] = "https://github.com/estanamaoapps/Framework/raw/master/Clientes/Head/FernandoCury.html";
+		
+		// codigos que serao inseridos na tag Body
+		var body_codes = [];
+		// layouts usados no leitor de feed
+		body_codes[0] = "https://github.com/estanamaoapps/Framework/raw/master/Clientes/Layout/FernandoCury.html"; 
+		// leitor de feed
+		body_codes[1] = "https://github.com/estanamaoapps/Framework/raw/master/LeitorFeed/LeitorFeed_1.0.html"; 
+		
+		// configuracoes
+		var configs = {};
+		// urls de exemplo para serem encurtadas: 
+		// por marcador: http://www.estanamaoappsfernandocury.blogspot.com/feeds/posts/default/-/Publicações/?alt=json
+		// por consulta: http://www.estanamaoappsfernandocury.blogspot.com/feeds/posts/default/?alt=json&q=Perfil
+		// ver mais em: https://developers.google.com/gdata/docs/2.0/reference#Queries
+		// encurtar url: https://goo.gl/
+		configs["feed_url"] = "http://goo.gl/V8VIsf";
+		
+		// mostrar capa na lista de itens
+		//configs["show_list_cover"] = true;
+		
+		// abrir direto o primeiro item (artigo) e ignorar a lista		
+		//configs["show_first_item_only"] = true;
+		
+		function OnLoad(){
+			var src = "";
+			src += "http://plataforma.aplicativoscolmeia.com.br/estanamao_framework/framework.php?";
+			src += "head=" + JSON.stringify(head_codes);
+			src += "&body=" + JSON.stringify(body_codes);
+			src += "&configs=" + JSON.stringify(configs);
+			document.getElementById("target").src=src;
+		}
+	</script>
+</body>
