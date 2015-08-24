@@ -24,9 +24,9 @@
 										
 										// titulo
 										if(_data.title["$t"].length > 70)
-											html += '<div>' + _data.title["$t"].substr(0, 70) + '...</div>';
+											html += '<div style="height:40px; overflow:hidden;">' + _data.title["$t"].substr(0, 70) + '...</div>';
 										else
-											html += '<div>' + _data.title["$t"] + '</div>';
+											html += '<div style="height:40px; overflow:hidden;">' + _data.title["$t"] + '</div>';
 									html += '</td>';
 									html += '<td class="arrow-color" style="width:26px;" style="vertical-align:center;"><span class="glyphicon glyphicon-chevron-right list-item-arrow" aria-hidden="true"></span></td>';
 								html += '</tr>';
@@ -49,12 +49,15 @@
 					html += '<td class="list-item-thumbnail-size"><img class="list-item-thumbnail-size" src="' + _data["media$thumbnail"].url + '" /></td>';
 				
 				html += '<td class="title-color container-fluid list-item-title" style="vertical-align:center;">';
+					// data
 					if(CONFIGS["show_list_item_date"] == true)												
 						html += '<div class="list-item-title-date">' + DateUtils.ApplyDateFormat("|D|/|M|/|Y|", [d.getFullYear(), d.getMonth(), d.getDate()]) + '</div>';											
+					
+					// titulo
 					if(_data.title["$t"].length > 70)
-						html += '<div>' + _data.title["$t"].substr(0, 70) + '...</div>';
+						html += '<div style="height:40px; overflow:hidden;">' + _data.title["$t"].substr(0, 70) + '...</div>';
 					else
-						html += '<div>' + _data.title["$t"] + '</div>';
+						html += '<div style="height:40px; overflow:hidden;">' + _data.title["$t"] + '</div>';
 				html += '</td>';
 				html += '<td class="arrow-color" style="width:26px;" style="vertical-align:center;"><span class="glyphicon glyphicon-chevron-right list-item-arrow" aria-hidden="true"></span></td>';
 				html += '</tr>';
