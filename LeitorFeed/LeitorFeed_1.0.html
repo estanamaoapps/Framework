@@ -105,7 +105,7 @@
 		var item = $('<div class="list-item total-fluid" item-id="' + _index + '"></div>');
 		var html = "";
 		// item de capa da lista de itens (artigos)
-		if(_index == 0 && Layout.layouts["feed_list_cover"] != null){
+		if(CONFIGS["show_list_cover"] == true && _index == 0 && Layout.layouts["feed_list_cover"] != null){
 			html += Layout.layouts["feed_list_cover"](_item_data);
 		// itens normal
 		}else if(Layout.layouts["feed_list_item"] != null){
