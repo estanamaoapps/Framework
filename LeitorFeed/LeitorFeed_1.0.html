@@ -60,21 +60,6 @@
 	
 	/*****************************************************************************************
 	
-	! LOADER
-	
-	*****************************************************************************************/
-	function ShowLoader(){
-		// source: http://codepen.io/dapacreative/pen/bNZbMM
-		var loader_html = '<div class="grid-row"><div class="col"><ul class="loading"><li></li><li></li><li></li></ul></div><div class="col"><ul class="loading reversed"><li></li><li></li><li></li></ul></div></div>';
-		$("#loader").html(loader_html);
-		$("#loader").css("display", "block");
-	}
-	function HideLoader(){
-		$("#loader").empty();
-		$("#loader").css("display", "none");
-	}
-	/*****************************************************************************************
-	
 	! FEED
 	
 	*****************************************************************************************/
@@ -83,8 +68,6 @@
 	
 	// carrega o feed e manda criar a lista, mostrar o primeiro artigo, etc
 	function GetAndAttachFeed(){
-		ShowLoader();
-		
 		$.ajax({
 			method: "GET",
 			dataType: "json",
@@ -93,8 +76,6 @@
 				url: CONFIGS["feed_url"]
 			}
 		}).done(function(json_feed){
-			HideLoader();
-			
 			FEED = json_feed;
 			if(json_feed["feed"] != null)
 				RefreshByHashtag();
