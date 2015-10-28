@@ -14,7 +14,7 @@
 	  
 	  // mes
 	  if(_data_array.length >= 2 && result.search("|M|") != -1){
-	   if(_data_array[1].toString().length == 2)
+	   if((_data_array[1] + 1).toString().length == 2)
 	    result = result.replace("|M|", (_data_array[1] + 1));
 	   else
 	    result = result.replace("|M|", "0" + (_data_array[1] + 1));
